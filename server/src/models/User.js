@@ -13,8 +13,7 @@ const userSchema = new mongoose.Schema({
     createdAt:{
         type:Date,
         default:Date.now
-    },
-    calories: Number
+    }
 });
 
 export const User = mongoose.model("User", userSchema);
