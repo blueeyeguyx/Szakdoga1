@@ -16,6 +16,7 @@ function App() {
 
   const [calories, setCalories] = useState(null);
   const [macros, setMacros] = useState(null);
+  const [plan, setPlan] = useState(null);
 
 
   const handleChange = (e) => {
@@ -34,8 +35,8 @@ function App() {
       );
       console.log(res.data);
       setCalories(res.data.calories);
-      console.log("CALORIESSTATE: ", calories);
       setMacros(res.data.macros);
+      setPlan(res.data.plan);
 
     }
     catch(err){
@@ -114,7 +115,21 @@ function App() {
       {macros && (<div>
         <p>Fehérje: {macros.protein}</p>
         <p>Szénhidrát: {macros.carbs}</p>
-        <p>Fehérje: {macros.fat}</p>
+        <p>Zsír: {macros.fat}</p>
+      </div>)}
+      {plan && (<div>
+       <>
+          <h3>Étrend</h3>
+          {plan.meals.map(m => (
+            <p key={m.name}>{m.name}</p>
+          ))}
+
+          <h3>Edzés</h3>
+          {plan.workouts.map(w => (
+            <p key={w}>{w}</p>
+          ))}
+          
+        </>
       </div>)}
     </div>);
 }

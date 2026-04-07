@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import {User} from "./models/User.js";
 import userRoutes from "./routes/userRoutes.js";
+import { generatePlan } from "./services/planGenerator.js";
 
 const app = express();
 dotenv.config();
@@ -28,14 +29,14 @@ app.post("/api/calculate", async (req, res) => {
     const goal = Number(req.body.goal);
     const bar = 10*weight + 6.25*height - 5*age + (gender === "male" ? 5 : -161 );
     const calories = goal === "fogyás" ? bar*0.8 : goal === "izomtömeg" ? bar*1.2 : bar;
-    const protein = goal === "izomtömeg" ? weight * 2 : goal === "fogyás" ? weight * 1.8 : weight * 1.6;
+    const protein1 = goal === "izomtömeg" ? weight * 2 : goal === "fogyás" ? weight * 1.8 : weight * 1.6;
 
-    const fat = weight * 0.8;
+    const fat1 = weight * 0.8;
 
     const remainingCalories =
-      calories - (protein * 4 + fat * 9);
+      calories - (protein1 * 4 + fat1 * 9);
 
-    const carbs = remainingCalories / 4;
+    const carbs1 = remainingCalories / 4;
       const user = await User.create({
         age,
         weight,
@@ -44,8 +45,14 @@ app.post("/api/calculate", async (req, res) => {
         goal,
         calories
       });
+    const macros = {
+      protein: protein1,
+      fat: fat1,
+      carbs: carbs1
+    }
+    const plan = generatePlan(req.body, macros);
+    res.json({macros, plan, calories, user});
 
-    res.json({macros: {protein, fat, carbs}, calories, user});
 });
 
 const PORT = 5000;
