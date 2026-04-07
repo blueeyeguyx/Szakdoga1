@@ -15,6 +15,8 @@ function App() {
   });
 
   const [calories, setCalories] = useState(null);
+  const [macros, setMacros] = useState(null);
+
 
   const handleChange = (e) => {
     setFormData({
@@ -32,6 +34,8 @@ function App() {
       );
       console.log(res.data);
       setCalories(res.data.calories);
+      console.log("CALORIESSTATE: ", calories);
+      setMacros(res.data.macros);
 
     }
     catch(err){
@@ -44,6 +48,12 @@ function App() {
     axios.get("http://localhost:5000/api/health")
       .then(res => console.log(res.data))
       .catch(err => console.error("Axios hiba:", err));
+  }, []);
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/users")
+    .then(res => console.log(res.data.user))
+    .catch(err => console.error("Axios hiba a users-nel: ", err));
   }, []);
   return ( <div style={{ padding: "20px" }}>
       <h1>Szakdoga App</h1>
@@ -100,7 +110,12 @@ function App() {
 
       </form>
 
-      {calories && <h2>Napi kalória: {calories}</h2>}
+      {calories !== null && (<h2>Napi kalória: {calories}</h2>)}
+      {macros && (<div>
+        <p>Fehérje: {macros.protein}</p>
+        <p>Szénhidrát: {macros.carbs}</p>
+        <p>Fehérje: {macros.fat}</p>
+      </div>)}
     </div>);
 }
 
