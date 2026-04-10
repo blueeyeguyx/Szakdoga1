@@ -17,7 +17,7 @@ function App() {
   const [calories, setCalories] = useState(null);
   const [macros, setMacros] = useState(null);
   const [plan, setPlan] = useState(null);
-
+  const [mostRecentPlan, setMostRecentPlan] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -36,6 +36,7 @@ function App() {
       console.log(res.data);
       setCalories(res.data.calories);
       setMacros(res.data.macros);
+      console.log(res.data.plan);
       setPlan(res.data.plan);
 
     }
@@ -43,6 +44,17 @@ function App() {
       console.error(err);
     }
   };
+
+  const handleLastPlanReq = async (e) =>{
+    e.preventDefault();
+    try{
+      const res = await axios.get("http://localhost:5000/api/plans1");
+      setMostRecentPlan(res.data[0]);
+    }
+    catch(err){
+      console.error("Hiba a legutolsó terv lekérdezésekor: ", err);
+    }
+  }
 
 
   useEffect(() => {
@@ -108,8 +120,11 @@ function App() {
         />
 
         <button type="submit">Számol</button>
-
       </form>
+      <form onSubmit={handleLastPlanReq}>
+        <button type="submit">Mutasd a legutóbbit</button>
+      </form>
+
 
       {calories !== null && (<h2>Napi kalória: {calories}</h2>)}
       {macros && (<div>
@@ -131,6 +146,25 @@ function App() {
           
         </>
       </div>)}
+      {
+        mostRecentPlan && (<div>
+          <>
+          <h3>Étrend</h3>
+          {
+            mostRecentPlan.meals.map(m => (
+              <p key={m.name}>{m.name}</p>
+            ))
+          }
+          <h3>Edzés</h3>
+          {
+            mostRecentPlan.workouts.map(w => (
+              <p key={w}>{w}</p>
+            ))
+          }
+          </>
+          </div>
+          )
+      }
     </div>);
 }
 

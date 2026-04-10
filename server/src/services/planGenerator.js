@@ -5,9 +5,8 @@ export const generatePlan = (user, macros) => {
         {name: "Túrós vacsora", calories: 300}
     ];
 
-    const workouts = [
-        user.goal == "fogyás" ? ["HIIT", "Futás", "Teljes testes edzés"] : ["Mell", "Hát", "Láb"]
-    ];
+    const workouts =
+        user.goal == "fogyás" ? ["HIIT", "Futás", "Teljes testes edzés"] : ["Mell", "Hát", "Láb"];
 
     return {meals, workouts};
 };

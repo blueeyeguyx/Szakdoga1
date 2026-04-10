@@ -4,8 +4,11 @@ const planSchema = new mongoose.Schema({
     userId: mongoose.Schema.Types.ObjectId,
     calories: Number,
     macros: Object,
-    meals: Array,
-    workouts: Array,
+    meals: [{
+        name: String,
+        calories: Number
+    }],
+    workouts: [String],
     createdAt: {
         type: Date,
         default: Date.now
